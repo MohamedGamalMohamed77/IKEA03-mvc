@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\LinkDev.IKEA3.DAL\LinkDev.IKEA3.DAL.csproj" />
+  </ItemGroup>
+
 </Project>
