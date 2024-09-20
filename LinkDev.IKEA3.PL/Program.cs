@@ -1,4 +1,6 @@
+using LinkDev.IKEA3.BLL.Services.Departments;
 using LinkDev.IKEA3.DAL.Presistance.Data;
+using LinkDev.IKEA3.DAL.Presistance.Repositories.Departments;
 using Microsoft.EntityFrameworkCore;
 
 namespace LinkDev.IKEA3.PL
@@ -12,14 +14,18 @@ namespace LinkDev.IKEA3.PL
             #region Configure Services
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+
             builder.Services.AddDbContext<ApplicationDbContext>((optionsBuilder) =>
             {
                 optionsBuilder.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
             });
+            builder.Services.AddScoped<IDepartmentRepository, DepartmentRepositories>();
+            builder.Services.AddScoped<IDepartmentService, DepartmentService>();
+            builder.Services.AddControllers();
 
 
             #endregion
-
+            builder.Logging.AddConsole();
             var app = builder.Build();
 
             #region Configure Kestral Middlewares
