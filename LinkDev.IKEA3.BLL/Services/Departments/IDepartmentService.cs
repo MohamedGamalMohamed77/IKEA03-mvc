@@ -9,8 +9,8 @@ namespace LinkDev.IKEA3.BLL.Services.Departments
 {
     public interface IDepartmentService
     {
-        IEnumerable<DepartmentToReturnDto> GetAllDepartments();
-        DepartmentDetailsToReturnDto? GetDepartmentById(int id);
+        IEnumerable<DepartmentDto> GetAllDepartments();
+        DepartmentDetailsDto? GetDepartmentById(int id);
         int CreatedDepartment(CreatedDepartmentDto department);
         int UpdatedDepartment(UpdatedDepartmentDto department);
 

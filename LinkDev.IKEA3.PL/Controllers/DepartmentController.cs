@@ -1,5 +1,7 @@
 ﻿using LinkDev.IKEA3.BLL.CustomModels.Departments;
 using LinkDev.IKEA3.BLL.Services.Departments;
+using LinkDev.IKEA3.DAL.Models.Department;
+using LinkDev.IKEA3.PL.ViewModels.Departments;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LinkDev.IKEA3.PL.Controllers
@@ -54,17 +56,13 @@ namespace LinkDev.IKEA3.PL.Controllers
             {
                 _logger.LogError(ex, ex.Message);
 
-                if (_environment.IsDevelopment())
-                {
-                    message = ex.Message;
-                    return View(department);
-                }
-                else
-                {
-                    message = "Department isn't Created";
-                    return View("Error", message);
-                }
+                message = _environment.IsDevelopment() ? ex.Message : "an error has occured during updating the department  :( ";
+
             }
+
+            ModelState.AddModelError(string.Empty, message);
+            return View(department);
+
         }
 
         [HttpGet]
@@ -80,6 +78,64 @@ namespace LinkDev.IKEA3.PL.Controllers
 
             return View(department);
         }
+
+        [HttpGet]
+        public IActionResult Edit(int? id)
+        {
+            if (id is null)
+                return BadRequest();
+
+            var department = _departmentService.GetDepartmentById(id.Value);
+
+            if (department is null)
+                return NotFound();
+
+            return View(new DepartmentEditViewModel()
+            {
+                Code = department.Code,
+                Name = department.Name,
+                Description = department.Description,
+                CreationDate = department.CreationDate,
+            });
+        }
+
+        [HttpPost]
+        public IActionResult Edit([FromRoute] int id,DepartmentEditViewModel departmentVM)
+        {
+            if (!ModelState.IsValid)
+                return View(departmentVM);
+            var message = string.Empty;
+            try
+            {
+                var departmentToUpdate = new UpdatedDepartmentDto()
+                {
+                    Id=id,
+                    Code = departmentVM.Code,
+                    Name = departmentVM.Name,
+                    Description = departmentVM.Description,
+                    CreationDate = departmentVM.CreationDate,
+                };
+                var result = _departmentService.UpdatedDepartment(departmentToUpdate) > 0;
+
+                if (result)
+                    return RedirectToAction("Index");
+                message = "an error has occured during updating the department  :( ";
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+
+                message = _environment.IsDevelopment() ? ex.Message : "an error has occured during updating the department  :( ";
+
+            }
+            
+            ModelState.AddModelError(string.Empty, message);
+            return View(departmentVM);
+
+
+        }
+
 
     }
 }
