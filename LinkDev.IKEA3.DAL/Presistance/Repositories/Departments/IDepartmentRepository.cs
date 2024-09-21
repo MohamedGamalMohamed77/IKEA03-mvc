@@ -14,7 +14,7 @@ namespace LinkDev.IKEA3.DAL.Presistance.Repositories.Departments
         Department? GetById(int id);
         int Add(Department department);
         int Update(Department department);
-        int Delete(Department department);
+        bool Delete(Department department);
 
     }
 }

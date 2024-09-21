@@ -22,7 +22,7 @@ namespace LinkDev.IKEA3.BLL.Services.Departments
             var departments = _departmeentRepository.GetAllAsIQueryable().Select(department => new DepartmentDto
             {
                 Id = department.Id,
-              Code=department.Code,
+                Code = department.Code,
                 Name = department.Name,
                 CreationDate = department.CreationDate
             }).AsNoTracking().ToList();
@@ -75,15 +75,14 @@ namespace LinkDev.IKEA3.BLL.Services.Departments
             };
             return _departmeentRepository.Update(createdDepartment);
         }
-        public int DeleteDepartment(int departmentId)
+        public  bool DeleteDepartment(int departmentId)
         {
 
             var department = _departmeentRepository.GetById(departmentId);
             if (department is { })
                 return _departmeentRepository.Delete(department);
-            return 0;
+            return false;
         }
-
 
     }
 }

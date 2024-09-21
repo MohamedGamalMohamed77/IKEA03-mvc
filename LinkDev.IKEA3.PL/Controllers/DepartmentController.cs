@@ -2,12 +2,14 @@
 using LinkDev.IKEA3.BLL.Services.Departments;
 using LinkDev.IKEA3.DAL.Models.Department;
 using LinkDev.IKEA3.PL.ViewModels.Departments;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LinkDev.IKEA3.PL.Controllers
 {
     public class DepartmentController : Controller
     {
+        #region Services
         private readonly IDepartmentService _departmentService;
         private readonly ILogger<DepartmentController> _logger;
         private readonly IWebHostEnvironment _environment;
@@ -21,17 +23,29 @@ namespace LinkDev.IKEA3.PL.Controllers
             _departmentService = departmentService;
 
         }
+        #endregion
+
+
+        #region Index
+      
         [HttpGet]
         public IActionResult Index()
         {
             var departments = _departmentService.GetAllDepartments();
             return View(departments);
         }
-        [HttpGet]
+
+        #endregion
+
+        #region Create
+       
+        [HttpGet] 
         public IActionResult Create()
         {
             return View();
         }
+       
+        
         [HttpPost]
         public IActionResult Create(CreatedDepartmentDto department)
         {
@@ -64,7 +78,9 @@ namespace LinkDev.IKEA3.PL.Controllers
             return View(department);
 
         }
+        #endregion
 
+        #region Details
         [HttpGet]
         public IActionResult Details(int? id)
         {
@@ -78,6 +94,9 @@ namespace LinkDev.IKEA3.PL.Controllers
 
             return View(department);
         }
+        #endregion
+
+        #region Edit
 
         [HttpGet]
         public IActionResult Edit(int? id)
@@ -100,7 +119,7 @@ namespace LinkDev.IKEA3.PL.Controllers
         }
 
         [HttpPost]
-        public IActionResult Edit([FromRoute] int id,DepartmentEditViewModel departmentVM)
+        public IActionResult Edit([FromRoute] int id, DepartmentEditViewModel departmentVM)
         {
             if (!ModelState.IsValid)
                 return View(departmentVM);
@@ -109,7 +128,7 @@ namespace LinkDev.IKEA3.PL.Controllers
             {
                 var departmentToUpdate = new UpdatedDepartmentDto()
                 {
-                    Id=id,
+                    Id = id,
                     Code = departmentVM.Code,
                     Name = departmentVM.Name,
                     Description = departmentVM.Description,
@@ -129,13 +148,50 @@ namespace LinkDev.IKEA3.PL.Controllers
                 message = _environment.IsDevelopment() ? ex.Message : "an error has occured during updating the department  :( ";
 
             }
-            
+
             ModelState.AddModelError(string.Empty, message);
             return View(departmentVM);
+        }
+        #endregion
 
+        #region Delete
+        [HttpGet]
+        public IActionResult Delete(int? id)
+        {
+            if (id is null)
+                return BadRequest();
+            var department = _departmentService.GetDepartmentById(id.Value);
+
+            if (department is null)
+                return NotFound();
+            return View(department);
 
         }
+        [HttpPost]
+        public IActionResult Delete(int id)
+        {
+            var message = string.Empty;
+            try
+            {
+                var deleted = _departmentService.DeleteDepartment(id);
 
+                if (deleted)
+                    return RedirectToAction(nameof(Index));
 
+                message = "an error has occured during deleting the department  :( ";
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+
+                message = _environment.IsDevelopment() ? ex.Message : "an error has occured during deleting the department  :( ";
+
+            }
+
+            ModelState.AddModelError(string.Empty, message);
+            return RedirectToAction(nameof(Index));
+
+        } 
+        #endregion
     }
 }

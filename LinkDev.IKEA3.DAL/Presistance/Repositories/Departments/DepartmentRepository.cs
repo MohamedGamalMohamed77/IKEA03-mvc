@@ -39,10 +39,10 @@ namespace LinkDev.IKEA3.DAL.Presistance.Repositories.Departments
             return _dbContext.SaveChanges();
         }
 
-        public int Delete(Department department)
+        public bool Delete(Department department)
         {
             _dbContext.Departments.Remove(department);
-            return _dbContext.SaveChanges();
+            return _dbContext.SaveChanges()>0;
         }
 
 
