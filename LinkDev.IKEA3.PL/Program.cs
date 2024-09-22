@@ -19,7 +19,7 @@ namespace LinkDev.IKEA3.PL
             {
                 optionsBuilder.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
             });
-            builder.Services.AddScoped<IDepartmentRepository, DepartmentRepositories>();
+            builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
             builder.Services.AddScoped<IDepartmentService, DepartmentService>();
             builder.Services.AddControllers();
 

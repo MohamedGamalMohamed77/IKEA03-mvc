@@ -1,4 +1,5 @@
 ﻿using LinkDev.IKEA3.DAL.Models.Department;
+using LinkDev.IKEA3.DAL.Models.Employee;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -19,6 +20,6 @@ namespace LinkDev.IKEA3.DAL.Presistance.Data
         => modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 
         public DbSet<Department> Departments { get; set; }
-
+        public DbSet<Employee> Employees { get; set; }
     }
 }
