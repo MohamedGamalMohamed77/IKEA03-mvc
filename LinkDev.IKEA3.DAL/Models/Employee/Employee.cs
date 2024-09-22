@@ -40,12 +40,5 @@ namespace LinkDev.IKEA3.DAL.Models.Employee
 
 		public Gender Gender { get; set; }
 
-
-
-
-
-
-
-
     }
 }

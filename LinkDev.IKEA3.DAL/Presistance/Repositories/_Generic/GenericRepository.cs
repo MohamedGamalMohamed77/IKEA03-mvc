@@ -20,8 +20,9 @@ namespace LinkDev.IKEA3.DAL.Presistance.Repositories._Generic
 		public IEnumerable<T> GetAll(bool WithNoTracking = true)
 		{
 			if (WithNoTracking)
-				return _dbContext.Set<T>().AsNoTracking().ToList();
-			return _dbContext.Set<T>().ToList();
+				return _dbContext.Set<T>().Where(X => !X.IsDeleted).AsNoTracking().ToList();
+
+			return _dbContext.Set<T>().Where(X=>!X.IsDeleted).ToList();
 		}
 		public IQueryable<T> GetAllAsIQueryable()
 		{
@@ -41,7 +42,8 @@ namespace LinkDev.IKEA3.DAL.Presistance.Repositories._Generic
 
 		public bool Delete(T T)
 		{
-			_dbContext.Set<T>().Remove(T);
+			T.IsDeleted = true;
+			_dbContext.Set<T>().Update(T);
 			return _dbContext.SaveChanges() > 0;
 		}
 
