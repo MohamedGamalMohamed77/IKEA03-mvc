@@ -109,33 +109,31 @@ namespace LinkDev.IKEA3.PL.Controllers.Employees
 			if (employee is null)
 				return NotFound();
 
-			return View(new EmployeeEditViewModel()
+			return View(new UpdatedEmployeeDto()
 			{
-				Name=employee.Name,
-				Age=employee.Age,
-				Salary=employee.Salary,
-				Email=employee.Email,
+                Name = employee.Name,
+                Age = employee.Age,
+                Address = employee.Address,
+                HiringDate = employee.HiringDate,
+                Salary = employee.Salary,
+                Email = employee.Email,
+                Gender = employee.Gender,
+                EmployeeType = employee.EmployeeType,
+                PhoneNumber = employee.PhoneNumber,
 				IsActive=employee.IsActive,
-			});
+            });
 		}
 
 		[HttpPost]
-		public IActionResult Edit([FromRoute] int id, EmployeeEditViewModel employee)
+		public IActionResult Edit([FromRoute] int id, UpdatedEmployeeDto employee)
 		{
 			if (!ModelState.IsValid)
 				return View(employee);
 			var message = string.Empty;
 			try
 			{
-				var employeeToUpdate = new UpdatedEmployeeDto()
-				{
-					Name = employee.Name,
-					Age = employee.Age,
-					Salary = employee.Salary,
-					Email = employee.Email,
-					IsActive = employee.IsActive,
-				};
-				var result = _employeeService.UpdatedEmployee(employeeToUpdate) > 0;
+				
+				var result = _employeeService.UpdatedEmployee(employee) > 0;
 
 				if (result)
 					return RedirectToAction("Index");
