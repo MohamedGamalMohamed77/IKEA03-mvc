@@ -11,7 +11,8 @@ namespace LinkDev.IKEA3.DAL.Presistance.Repositories._Generic
 	{
 		IEnumerable<T> GetAll(bool WithNoTracking = true);
 		IQueryable<T> GetAllAsIQueryable();
-		T? GetById(int id);
+        IEnumerable<T> GetAllAsIEnumerable();
+        T? GetById(int id);
 		int Add(T T);
 		int Update(T T);
 		bool Delete(T T);
