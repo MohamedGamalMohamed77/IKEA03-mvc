@@ -39,13 +39,15 @@ namespace LinkDev.IKEA3.PL.Controllers.Employees
 
 		#region Create
 		[HttpGet]
-		public IActionResult Create()
+        [ValidateAntiForgeryToken]
+        public IActionResult Create()
 		{
 			return View();
 		}
 
 		[HttpPost]
-		public IActionResult Create(CreatedEmployeeDto employee)
+        [ValidateAntiForgeryToken]
+        public IActionResult Create(CreatedEmployeeDto employee)
 		{
 			if (ModelState.IsValid)
 				return View(employee);
@@ -99,6 +101,7 @@ namespace LinkDev.IKEA3.PL.Controllers.Employees
 		#region Edit
 
 		[HttpGet]
+		[ValidateAntiForgeryToken]
 		public IActionResult Edit(int? id)
 		{
 			if (id is null)
@@ -125,7 +128,8 @@ namespace LinkDev.IKEA3.PL.Controllers.Employees
 		}
 
 		[HttpPost]
-		public IActionResult Edit([FromRoute] int id, UpdatedEmployeeDto employee)
+        [ValidateAntiForgeryToken]
+        public IActionResult Edit([FromRoute] int id, UpdatedEmployeeDto employee)
 		{
 			if (!ModelState.IsValid)
 				return View(employee);
@@ -156,7 +160,8 @@ namespace LinkDev.IKEA3.PL.Controllers.Employees
 		#region Delete
 		
 		[HttpPost]
-		public IActionResult Delete(int id)
+        [ValidateAntiForgeryToken]
+        public IActionResult Delete(int id)
 		{
 			var message = string.Empty;
 			try

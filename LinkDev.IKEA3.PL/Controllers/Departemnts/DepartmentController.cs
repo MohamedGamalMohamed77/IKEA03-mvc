@@ -39,7 +39,8 @@ namespace LinkDev.IKEA3.PL.Controllers
 
         #region Create
        
-        [HttpGet] 
+        [HttpGet]
+        [ValidateAntiForgeryToken]
         public IActionResult Create()
         {
             return View();
@@ -47,6 +48,7 @@ namespace LinkDev.IKEA3.PL.Controllers
        
         
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Create(CreatedDepartmentDto department)
         {
             if (!ModelState.IsValid)
@@ -99,6 +101,7 @@ namespace LinkDev.IKEA3.PL.Controllers
         #region Edit
 
         [HttpGet]
+        [ValidateAntiForgeryToken]
         public IActionResult Edit(int? id)
         {
             if (id is null)
@@ -119,6 +122,7 @@ namespace LinkDev.IKEA3.PL.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Edit([FromRoute] int id, DepartmentEditViewModel departmentVM)
         {
             if (!ModelState.IsValid)
@@ -168,6 +172,7 @@ namespace LinkDev.IKEA3.PL.Controllers
 
         //}
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Delete(int id)
         {
             var message = string.Empty;
