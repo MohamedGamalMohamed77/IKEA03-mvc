@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LinkDev.IKEA3.DAL.Common;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -22,8 +23,9 @@ namespace LinkDev.IKEA3.BLL.CustomModels.Employees
 
 		[Display(Name = "Is Active")]
 		public bool IsActive { get; set; }
-		public string EmployeeType { get; set; } = null!;
-		public string Gender { get; set; } = null!;
+		public EmpType EmployeeType { get; set; } 
+		public Gender Gender { get; set; }
+
         #region Adminstration
         public int CreatedBy { get; set; }
         public int LastModifiedBy { get; set; }

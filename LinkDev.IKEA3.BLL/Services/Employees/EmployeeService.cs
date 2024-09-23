@@ -96,8 +96,8 @@ namespace LinkDev.IKEA3.BLL.Services.Employees
 				HiringDate = employee.HiringDate,
 				Salary = employee.Salary,
 				Email = employee.Email,
-				Gender =nameof( employee.Gender),
-				EmployeeType = nameof(employee.EmployeeType),
+				Gender = employee.Gender,
+				EmployeeType = employee.EmployeeType,
 				PhoneNumber =employee.PhoneNumber,
 			};
 			return null;
