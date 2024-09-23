@@ -1,6 +1,7 @@
 ﻿using LinkDev.IKEA3.BLL.CustomModels.Employees;
 using LinkDev.IKEA3.DAL.Models.Employee;
 using LinkDev.IKEA3.DAL.Presistance.Repositories.Employees;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,6 +31,7 @@ namespace LinkDev.IKEA3.BLL.Services.Employees
 				Gender = createdEmployee.Gender,
 				EmployeeType = createdEmployee.EmployeeType,
 				PhoneNumber = createdEmployee.PhoneNumber,
+				IsActive=createdEmployee.IsActive,
 				LastModifiedBy = 1,
 				CreatedBy = 1,
 				LastModifiedOn = DateTime.UtcNow,
@@ -66,7 +68,7 @@ namespace LinkDev.IKEA3.BLL.Services.Employees
 
 		public IEnumerable<EmployeeDto> GetAllEmployees()
 		{
-		 return _employeeRepository.GetAllAsIQueryable().Select(employee=> new EmployeeDto() 
+		 var employees= _employeeRepository.GetAllAsIQueryable().Select(employee=> new EmployeeDto() 
 		 {
 			 Id = employee.Id,
 			 Name = employee.Name,
@@ -75,10 +77,10 @@ namespace LinkDev.IKEA3.BLL.Services.Employees
 			 Email = employee.Email,
 			 Gender = nameof(employee.Gender),
 			 EmployeeType = nameof(employee.EmployeeType),
-			
-		 });
 
-				
+         }).AsNoTracking().ToList();
+
+			return employees;
 		}
 
 		public EmployeeDetailsDto? GetEmployeeById(int id)
@@ -96,7 +98,7 @@ namespace LinkDev.IKEA3.BLL.Services.Employees
 				Email = employee.Email,
 				Gender =nameof( employee.Gender),
 				EmployeeType = nameof(employee.EmployeeType),
-				PhoneNumber =nameof(employee.PhoneNumber),
+				PhoneNumber =employee.PhoneNumber,
 			};
 			return null;
 		}
