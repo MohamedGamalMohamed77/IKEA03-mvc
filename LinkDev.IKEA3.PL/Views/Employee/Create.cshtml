@@ -55,14 +55,14 @@
     </div>
 
     <div class="offset-3 form-group mb-3">
-        <label asp-for="EmployeeType" class="form-label" ></label>
+        <label asp-for="EmployeeType " class="form-label mb-2" ></label>
         <select asp-for="EmployeeType" asp-items="Html.GetEnumSelectList<EmpType>()" class="form-label">
             <option value="">Select Employee Type</option>
         </select>
     </div>
 
     <div class="mt-4">
-        <input type="submit" value="Create" class="btn btn-primary"/>
+        <input type="submit" value="Create" class="btn btn-primary mb-2"/>
         <a asp-action="Index" class="btn btn-light">Back To List</a>
     </div>
      
