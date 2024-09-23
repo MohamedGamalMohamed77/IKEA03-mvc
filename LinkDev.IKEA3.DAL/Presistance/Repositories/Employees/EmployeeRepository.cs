@@ -15,5 +15,10 @@ namespace LinkDev.IKEA3.DAL.Presistance.Repositories.Employees
 		public EmployeeRepository(ApplicationDbContext dbContext) : base(dbContext)
 		{
 		}
-	}
+
+        IEnumerable<Employee> IGenericRepository<Employee>.GetAllAsIEnumerable()
+        {
+            throw new NotImplementedException();
+        }
+    }
 }

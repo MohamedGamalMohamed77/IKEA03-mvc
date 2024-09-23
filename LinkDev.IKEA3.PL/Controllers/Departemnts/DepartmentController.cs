@@ -155,18 +155,18 @@ namespace LinkDev.IKEA3.PL.Controllers
         #endregion
 
         #region Delete
-        [HttpGet]
-        public IActionResult Delete(int? id)
-        {
-            if (id is null)
-                return BadRequest();
-            var department = _departmentService.GetDepartmentById(id.Value);
+        //[HttpGet]
+        //public IActionResult Delete(int? id)
+        //{
+        //    if (id is null)
+        //        return BadRequest();
+        //    var department = _departmentService.GetDepartmentById(id.Value);
 
-            if (department is null)
-                return NotFound();
-            return View(department);
+        //    if (department is null)
+        //        return NotFound();
+        //    return View(department);
 
-        }
+        //}
         [HttpPost]
         public IActionResult Delete(int id)
         {

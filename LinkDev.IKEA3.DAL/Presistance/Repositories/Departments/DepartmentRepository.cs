@@ -16,6 +16,9 @@ namespace LinkDev.IKEA3.DAL.Presistance.Repositories.Departments
 		{
 		}
 
-
-	}
+        IEnumerable<Department> IGenericRepository<Department>.GetAllAsIEnumerable()
+        {
+            throw new NotImplementedException();
+        }
+    }
 }

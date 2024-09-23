@@ -75,8 +75,8 @@ namespace LinkDev.IKEA3.BLL.Services.Employees
 			 Age = employee.Age,
 			 Salary = employee.Salary,
 			 Email = employee.Email,
-			 Gender = nameof(employee.Gender),
-			 EmployeeType = nameof(employee.EmployeeType),
+			 Gender = employee.Gender.ToString(),
+			 EmployeeType = employee.EmployeeType.ToString(),
 
          }).AsNoTracking().ToList();
 
