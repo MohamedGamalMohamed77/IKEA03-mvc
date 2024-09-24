@@ -39,7 +39,6 @@ namespace LinkDev.IKEA3.PL.Controllers.Employees
 
 		#region Create
 		[HttpGet]
-        [ValidateAntiForgeryToken]
         public IActionResult Create()
 		{
 			return View();
@@ -47,7 +46,7 @@ namespace LinkDev.IKEA3.PL.Controllers.Employees
 
 		[HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(CreatedEmployeeDto employee)
+        public IActionResult Create(EmployeeViewModel employee)
 		{
 			if (ModelState.IsValid)
 				return View(employee);
@@ -57,7 +56,22 @@ namespace LinkDev.IKEA3.PL.Controllers.Employees
 
 			try
 			{
-				var result = _employeeService.CreatedEmployee(employee);
+
+                var createdEmployee = new CreatedEmployeeDto()
+                {
+                    Name = employee.Name,
+                    Age = employee.Age,
+                    Address = employee.Address,
+                    HiringDate = employee.HiringDate,
+                    Salary = employee.Salary,
+                    Email = employee.Email,
+                    Gender = employee.Gender,
+                    EmployeeType = employee.EmployeeType,
+                    PhoneNumber = employee.PhoneNumber,
+                    IsActive = employee.IsActive,
+                };
+
+                var result = _employeeService.CreatedEmployee(createdEmployee);
 				if (result > 0)
 					return RedirectToAction(nameof(Index));
 				else
@@ -101,7 +115,6 @@ namespace LinkDev.IKEA3.PL.Controllers.Employees
 		#region Edit
 
 		[HttpGet]
-		[ValidateAntiForgeryToken]
 		public IActionResult Edit(int? id)
 		{
 			if (id is null)
@@ -129,15 +142,28 @@ namespace LinkDev.IKEA3.PL.Controllers.Employees
 
 		[HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit([FromRoute] int id, UpdatedEmployeeDto employee)
+        public IActionResult Edit([FromRoute] int id, EmployeeViewModel employee)
 		{
 			if (!ModelState.IsValid)
 				return View(employee);
 			var message = string.Empty;
 			try
 			{
+				var updatedEmployee=new UpdatedEmployeeDto() 
+				{
+                    Name = employee.Name,
+                    Age = employee.Age,
+                    Address = employee.Address,
+                    HiringDate = employee.HiringDate,
+                    Salary = employee.Salary,
+                    Email = employee.Email,
+                    Gender = employee.Gender,
+                    EmployeeType = employee.EmployeeType,
+                    PhoneNumber = employee.PhoneNumber,
+                    IsActive = employee.IsActive,
+                };
 				
-				var result = _employeeService.UpdatedEmployee(employee) > 0;
+				var result = _employeeService.UpdatedEmployee(updatedEmployee) > 0;
 
 				if (result)
 					return RedirectToAction("Index");
