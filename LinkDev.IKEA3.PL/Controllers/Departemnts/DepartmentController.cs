@@ -64,15 +64,15 @@ namespace LinkDev.IKEA3.PL.Controllers
                     Description = departmentVM.Description,
                     CreationDate = departmentVM.CreationDate,
                 };
-                var result = _departmentService.CreatedDepartment(createdDepartment);
-                if (result > 0)
-                    return RedirectToAction(nameof(Index));
-                else
-                {
-                    message = "Department isn't Created";
-                    ModelState.AddModelError(string.Empty, message);
-                    return View(departmentVM);
-                }
+                var result = _departmentService.CreatedDepartment(createdDepartment) > 0;
+
+                if (!result)
+                   message = "Department is Created";
+               
+                  
+            ModelState.AddModelError(string.Empty, message);
+            return View(departmentVM);
+              
             }
             catch (Exception ex)
             {
@@ -80,10 +80,10 @@ namespace LinkDev.IKEA3.PL.Controllers
 
                 message = _environment.IsDevelopment() ? ex.Message : "an error has occured during updating the department  :( ";
 
+                ViewData["message"]=message;
+                return RedirectToAction(nameof(Index));
             }
 
-            ModelState.AddModelError(string.Empty, message);
-            return View(departmentVM);
 
         }
         #endregion
