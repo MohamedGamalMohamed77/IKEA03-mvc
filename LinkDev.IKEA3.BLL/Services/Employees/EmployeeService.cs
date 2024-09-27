@@ -69,10 +69,11 @@ namespace LinkDev.IKEA3.BLL.Services.Employees
 			return false;
 		}
 
-		public IEnumerable<EmployeeDto> GetAllEmployees()
+		public IEnumerable<EmployeeDto> GetEmployees(string search)
 		{
-		 var employees= _employeeRepository.GetAllAsIQueryable()
-				.Where(E=>!E.IsDeleted)
+		 var employees= _employeeRepository
+				.GetAllAsIQueryable()
+				.Where(E=>!E.IsDeleted && (string.IsNullOrEmpty(search)||E.Name.ToLower().Contains(search.ToLower())))
 				.Include(E=>E.Department)
 				.Select(employee=> new EmployeeDto() 
 		 {

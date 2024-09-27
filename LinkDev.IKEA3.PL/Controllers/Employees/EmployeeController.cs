@@ -32,9 +32,9 @@ namespace LinkDev.IKEA3.PL.Controllers.Employees
 
 		#region Index
 		[HttpGet]
-		public IActionResult Index()
+		public IActionResult Index(string search)
 		{
-			var employee = _employeeService.GetAllEmployees();
+			var employee = _employeeService.GetEmployees(search);
 			return View(employee);
 		}
 
