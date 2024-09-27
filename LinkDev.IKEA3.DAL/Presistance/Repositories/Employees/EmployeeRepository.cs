@@ -20,5 +20,10 @@ namespace LinkDev.IKEA3.DAL.Presistance.Repositories.Employees
         {
             throw new NotImplementedException();
         }
+
+        int IEmployeeRepository.Update(Employee employee)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

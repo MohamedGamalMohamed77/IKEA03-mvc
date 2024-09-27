@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using LinkDev.IKEA3.BLL.CustomModels.Departments;
+﻿using LinkDev.IKEA3.BLL.CustomModels.Departments;
 using LinkDev.IKEA3.BLL.CustomModels.Employees;
 using LinkDev.IKEA3.BLL.Services.Departments;
 using LinkDev.IKEA3.BLL.Services.Employees;
@@ -17,19 +16,16 @@ namespace LinkDev.IKEA3.PL.Controllers.Employees
 
 		private readonly IEmployeeService _employeeService;
 		private readonly ILogger<EmployeeController> _logger;
-		private readonly IMapper _mapper;
 		private readonly IWebHostEnvironment _environment;
 		
 
 		public EmployeeController(IEmployeeService employeeService,
 			ILogger<EmployeeController> logger,
-			IMapper mapper,
 			IWebHostEnvironment environment)
 		{
 			_logger = logger;
 			_environment = environment;
 			_employeeService = employeeService;
-		    _mapper=mapper;
 		}
 		#endregion
 

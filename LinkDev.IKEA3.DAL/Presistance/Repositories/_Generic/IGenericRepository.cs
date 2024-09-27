@@ -13,8 +13,8 @@ namespace LinkDev.IKEA3.DAL.Presistance.Repositories._Generic
 		IQueryable<T> GetAllAsIQueryable();
         IEnumerable<T> GetAllAsIEnumerable();
         T? GetById(int id);
-		int Add(T T);
-		int Update(T T);
-		bool Delete(T T);
+		void Add(T T);
+		void Update(T T);
+		void Delete(T T);
 	}
 }
