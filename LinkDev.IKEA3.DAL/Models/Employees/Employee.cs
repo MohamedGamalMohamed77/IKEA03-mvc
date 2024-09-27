@@ -1,4 +1,5 @@
 ﻿using LinkDev.IKEA3.DAL.Common;
+using LinkDev.IKEA3.DAL.Models.Departments;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -6,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LinkDev.IKEA3.DAL.Models.Employee
+namespace LinkDev.IKEA3.DAL.Models.Employees
 {
 	public class Employee : ModelBase
 	{
@@ -40,5 +41,10 @@ namespace LinkDev.IKEA3.DAL.Models.Employee
 
 		public Gender Gender { get; set; }
 
-    }
+		public int? DepartmentId { get; set; }
+
+		public virtual Department? Department { get; set; }
+
+
+	}
 }

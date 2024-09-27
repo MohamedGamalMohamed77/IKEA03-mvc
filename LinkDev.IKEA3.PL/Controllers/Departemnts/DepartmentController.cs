@@ -1,6 +1,6 @@
 ﻿using LinkDev.IKEA3.BLL.CustomModels.Departments;
 using LinkDev.IKEA3.BLL.Services.Departments;
-using LinkDev.IKEA3.DAL.Models.Department;
+using LinkDev.IKEA3.DAL.Models.Departments;
 using LinkDev.IKEA3.PL.ViewModels.Departments;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;

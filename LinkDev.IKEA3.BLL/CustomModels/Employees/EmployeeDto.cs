@@ -21,6 +21,8 @@ namespace LinkDev.IKEA3.BLL.CustomModels.Employees
 		public bool IsActive { get; set; }
 		public string EmployeeType { get; set; } = null!;
 		public string Gender { get; set; } = null!;
+		public string Department { get; set; } = null!;
+
 
 	}
 }

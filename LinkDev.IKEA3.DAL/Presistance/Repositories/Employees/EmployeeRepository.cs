@@ -1,4 +1,4 @@
-﻿using LinkDev.IKEA3.DAL.Models.Employee;
+﻿using LinkDev.IKEA3.DAL.Models.Employees;
 using LinkDev.IKEA3.DAL.Presistance.Data;
 using LinkDev.IKEA3.DAL.Presistance.Repositories._Generic;
 using Microsoft.EntityFrameworkCore;

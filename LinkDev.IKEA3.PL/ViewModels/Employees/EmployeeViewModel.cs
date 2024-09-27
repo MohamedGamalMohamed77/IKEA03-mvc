@@ -35,6 +35,8 @@ namespace LinkDev.IKEA3.PL.ViewModels.Employees
 
         public Gender Gender { get; set; }
 
+        [Display(Name ="DepartmentId")]
+        public int? DepartmentId { get; set; }
 
     }
 }

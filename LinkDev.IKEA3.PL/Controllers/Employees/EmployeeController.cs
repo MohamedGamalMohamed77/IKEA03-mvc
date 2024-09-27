@@ -1,8 +1,9 @@
 ﻿using LinkDev.IKEA3.BLL.CustomModels.Departments;
 using LinkDev.IKEA3.BLL.CustomModels.Employees;
+using LinkDev.IKEA3.BLL.Services.Departments;
 using LinkDev.IKEA3.BLL.Services.Employees;
-using LinkDev.IKEA3.DAL.Models.Department;
-using LinkDev.IKEA3.DAL.Models.Employee;
+using LinkDev.IKEA3.DAL.Models.Departments;
+using LinkDev.IKEA3.DAL.Models.Employees;
 using LinkDev.IKEA3.PL.ViewModels.Departments;
 using LinkDev.IKEA3.PL.ViewModels.Employees;
 using Microsoft.AspNetCore.Mvc;
@@ -16,6 +17,7 @@ namespace LinkDev.IKEA3.PL.Controllers.Employees
 		private readonly IEmployeeService _employeeService;
 		private readonly ILogger<EmployeeController> _logger;
 		private readonly IWebHostEnvironment _environment;
+		
 
 		public EmployeeController(IEmployeeService employeeService,
 			ILogger<EmployeeController> logger,
@@ -24,6 +26,7 @@ namespace LinkDev.IKEA3.PL.Controllers.Employees
 			_logger = logger;
 			_environment = environment;
 			_employeeService = employeeService;
+		
 		}
 		#endregion
 

@@ -10,9 +10,9 @@ namespace LinkDev.IKEA3.BLL.CustomModels.Employees
 {
 	public class UpdatedEmployeeDto
 	{
-        public int Id { get; set; }
+		public int Id { get; set; }
 
-        [MaxLength(50, ErrorMessage = "MaxLength of Name is 50 Chars")]
+		[MaxLength(50, ErrorMessage = "MaxLength of Name is 50 Chars")]
 		[MinLength(5, ErrorMessage = "MinLength of Name is 5 Chars")]
 		public string Name { get; set; } = null!;
 
@@ -40,8 +40,8 @@ namespace LinkDev.IKEA3.BLL.CustomModels.Employees
 
 		public EmpType EmployeeType { get; set; }
 
-		public Gender Gender{get; set;}
+		public Gender Gender { get; set; }
+		public int? DepartmentId { get; set; }
 
-
-		}
+	}
 }
