@@ -1,4 +1,5 @@
-﻿using LinkDev.IKEA3.BLL.CustomModels.Departments;
+﻿using AutoMapper;
+using LinkDev.IKEA3.BLL.CustomModels.Departments;
 using LinkDev.IKEA3.BLL.CustomModels.Employees;
 using LinkDev.IKEA3.BLL.Services.Departments;
 using LinkDev.IKEA3.BLL.Services.Employees;
@@ -16,17 +17,19 @@ namespace LinkDev.IKEA3.PL.Controllers.Employees
 
 		private readonly IEmployeeService _employeeService;
 		private readonly ILogger<EmployeeController> _logger;
+		private readonly IMapper _mapper;
 		private readonly IWebHostEnvironment _environment;
 		
 
 		public EmployeeController(IEmployeeService employeeService,
 			ILogger<EmployeeController> logger,
+			IMapper mapper,
 			IWebHostEnvironment environment)
 		{
 			_logger = logger;
 			_environment = environment;
 			_employeeService = employeeService;
-		
+		    _mapper=mapper;
 		}
 		#endregion
 
@@ -74,14 +77,12 @@ namespace LinkDev.IKEA3.PL.Controllers.Employees
                     IsActive = employee.IsActive,
                 };
 
-                var result = _employeeService.CreatedEmployee(createdEmployee);
-				if (result > 0)
-					return RedirectToAction(nameof(Index));
-				else
+                var result = _employeeService.CreatedEmployee(createdEmployee) > 0;
+				if (!result)
 				{
-					message = "employee isn't Created";
+					message = "Employee is Created";
 					ModelState.AddModelError(string.Empty, message);
-					return View(employee);
+					return View(employee); 
 				}
 			}
 			catch (Exception ex)
@@ -92,9 +93,8 @@ namespace LinkDev.IKEA3.PL.Controllers.Employees
 
 			}
 
-			ModelState.AddModelError(string.Empty, message);
-			return View(employee);
-		}
+            return Redirect(nameof(Index));
+        }
 
 		#endregion
 
