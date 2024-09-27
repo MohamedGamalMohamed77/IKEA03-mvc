@@ -1,4 +1,4 @@
-﻿using LinkDev.IKEA3.DAL.Models.Employee;
+﻿using LinkDev.IKEA3.DAL.Models.Employees;
 using LinkDev.IKEA3.DAL.Presistance.Data;
 using LinkDev.IKEA3.DAL.Presistance.Repositories._Generic;
 using Microsoft.EntityFrameworkCore;
@@ -15,5 +15,10 @@ namespace LinkDev.IKEA3.DAL.Presistance.Repositories.Employees
 		public EmployeeRepository(ApplicationDbContext dbContext) : base(dbContext)
 		{
 		}
-	}
+
+        IEnumerable<Employee> IGenericRepository<Employee>.GetAllAsIEnumerable()
+        {
+            throw new NotImplementedException();
+        }
+    }
 }

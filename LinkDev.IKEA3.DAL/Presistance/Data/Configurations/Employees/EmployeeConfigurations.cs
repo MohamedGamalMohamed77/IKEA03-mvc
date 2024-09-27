@@ -1,5 +1,5 @@
 ﻿using LinkDev.IKEA3.DAL.Common;
-using LinkDev.IKEA3.DAL.Models.Employee;
+using LinkDev.IKEA3.DAL.Models.Employees;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;

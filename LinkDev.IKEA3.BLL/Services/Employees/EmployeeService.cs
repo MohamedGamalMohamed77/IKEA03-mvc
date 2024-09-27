@@ -1,5 +1,5 @@
 ﻿using LinkDev.IKEA3.BLL.CustomModels.Employees;
-using LinkDev.IKEA3.DAL.Models.Employee;
+using LinkDev.IKEA3.DAL.Models.Employees;
 using LinkDev.IKEA3.DAL.Presistance.Repositories.Employees;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -35,6 +35,7 @@ namespace LinkDev.IKEA3.BLL.Services.Employees
 				LastModifiedBy = 1,
 				CreatedBy = 1,
 				LastModifiedOn = DateTime.UtcNow,
+				DepartmentId=createdEmployee.DepartmentId,
 			};
 			return _employeeRepository.Add(employee);
 		}
@@ -55,6 +56,8 @@ namespace LinkDev.IKEA3.BLL.Services.Employees
 				LastModifiedBy = 1,
 				CreatedBy = 1,
 				LastModifiedOn = DateTime.UtcNow,
+				DepartmentId=updatedEmployee.DepartmentId,
+				
 			};
 			return _employeeRepository.Update(employee);
 		}
@@ -68,16 +71,19 @@ namespace LinkDev.IKEA3.BLL.Services.Employees
 
 		public IEnumerable<EmployeeDto> GetAllEmployees()
 		{
-		 var employees= _employeeRepository.GetAllAsIQueryable().Where(E=>!E.IsDeleted).Select(employee=> new EmployeeDto() 
+		 var employees= _employeeRepository.GetAllAsIQueryable()
+				.Where(E=>!E.IsDeleted)
+				.Include(E=>E.Department)
+				.Select(employee=> new EmployeeDto() 
 		 {
 			 Id = employee.Id,
 			 Name = employee.Name,
 			 Age = employee.Age,
 			 Salary = employee.Salary,
 			 Email = employee.Email,
-			 Gender = nameof(employee.Gender),
-			 EmployeeType = nameof(employee.EmployeeType),
-
+			 Gender = employee.Gender.ToString(),
+			 EmployeeType = employee.EmployeeType.ToString(),
+			 Department=employee.Department.Name
          }).AsNoTracking().ToList();
 
 			return employees;
@@ -86,20 +92,21 @@ namespace LinkDev.IKEA3.BLL.Services.Employees
 		public EmployeeDetailsDto? GetEmployeeById(int id)
 		{
 			var employee = _employeeRepository.GetById(id);
-			if(employee is { })
-			return  new EmployeeDetailsDto()
-			{
-				Id = employee.Id,
-				Name = employee.Name,
-				Age = employee.Age,
-				Address = employee.Address,
-				HiringDate = employee.HiringDate,
-				Salary = employee.Salary,
-				Email = employee.Email,
-				Gender = employee.Gender,
-				EmployeeType = employee.EmployeeType,
-				PhoneNumber =employee.PhoneNumber,
+			if (employee is { })
+				return new EmployeeDetailsDto()
+				{
+					Id = employee.Id,
+					Name = employee.Name,
+					Age = employee.Age,
+					Address = employee.Address,
+					HiringDate = employee.HiringDate,
+					Salary = employee.Salary,
+					Email = employee.Email,
+					Gender = employee.Gender,
+					EmployeeType = employee.EmployeeType,
+					PhoneNumber = employee.PhoneNumber,
 			};
+
 			return null;
 		}
 

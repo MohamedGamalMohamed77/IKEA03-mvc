@@ -1,8 +1,9 @@
 ﻿using LinkDev.IKEA3.BLL.CustomModels.Departments;
 using LinkDev.IKEA3.BLL.CustomModels.Employees;
+using LinkDev.IKEA3.BLL.Services.Departments;
 using LinkDev.IKEA3.BLL.Services.Employees;
-using LinkDev.IKEA3.DAL.Models.Department;
-using LinkDev.IKEA3.DAL.Models.Employee;
+using LinkDev.IKEA3.DAL.Models.Departments;
+using LinkDev.IKEA3.DAL.Models.Employees;
 using LinkDev.IKEA3.PL.ViewModels.Departments;
 using LinkDev.IKEA3.PL.ViewModels.Employees;
 using Microsoft.AspNetCore.Mvc;
@@ -16,6 +17,7 @@ namespace LinkDev.IKEA3.PL.Controllers.Employees
 		private readonly IEmployeeService _employeeService;
 		private readonly ILogger<EmployeeController> _logger;
 		private readonly IWebHostEnvironment _environment;
+		
 
 		public EmployeeController(IEmployeeService employeeService,
 			ILogger<EmployeeController> logger,
@@ -24,6 +26,7 @@ namespace LinkDev.IKEA3.PL.Controllers.Employees
 			_logger = logger;
 			_environment = environment;
 			_employeeService = employeeService;
+		
 		}
 		#endregion
 
@@ -39,13 +42,14 @@ namespace LinkDev.IKEA3.PL.Controllers.Employees
 
 		#region Create
 		[HttpGet]
-		public IActionResult Create()
+        public IActionResult Create()
 		{
 			return View();
 		}
 
 		[HttpPost]
-		public IActionResult Create(CreatedEmployeeDto employee)
+        [ValidateAntiForgeryToken]
+        public IActionResult Create(EmployeeViewModel employee)
 		{
 			if (ModelState.IsValid)
 				return View(employee);
@@ -55,7 +59,22 @@ namespace LinkDev.IKEA3.PL.Controllers.Employees
 
 			try
 			{
-				var result = _employeeService.CreatedEmployee(employee);
+
+                var createdEmployee = new CreatedEmployeeDto()
+                {
+                    Name = employee.Name,
+                    Age = employee.Age,
+                    Address = employee.Address,
+                    HiringDate = employee.HiringDate,
+                    Salary = employee.Salary,
+                    Email = employee.Email,
+                    Gender = employee.Gender,
+                    EmployeeType = employee.EmployeeType,
+                    PhoneNumber = employee.PhoneNumber,
+                    IsActive = employee.IsActive,
+                };
+
+                var result = _employeeService.CreatedEmployee(createdEmployee);
 				if (result > 0)
 					return RedirectToAction(nameof(Index));
 				else
@@ -125,15 +144,29 @@ namespace LinkDev.IKEA3.PL.Controllers.Employees
 		}
 
 		[HttpPost]
-		public IActionResult Edit([FromRoute] int id, UpdatedEmployeeDto employee)
+        [ValidateAntiForgeryToken]
+        public IActionResult Edit([FromRoute] int id, EmployeeViewModel employee)
 		{
 			if (!ModelState.IsValid)
 				return View(employee);
 			var message = string.Empty;
 			try
 			{
+				var updatedEmployee=new UpdatedEmployeeDto() 
+				{
+                    Name = employee.Name,
+                    Age = employee.Age,
+                    Address = employee.Address,
+                    HiringDate = employee.HiringDate,
+                    Salary = employee.Salary,
+                    Email = employee.Email,
+                    Gender = employee.Gender,
+                    EmployeeType = employee.EmployeeType,
+                    PhoneNumber = employee.PhoneNumber,
+                    IsActive = employee.IsActive,
+                };
 				
-				var result = _employeeService.UpdatedEmployee(employee) > 0;
+				var result = _employeeService.UpdatedEmployee(updatedEmployee) > 0;
 
 				if (result)
 					return RedirectToAction("Index");
@@ -156,7 +189,8 @@ namespace LinkDev.IKEA3.PL.Controllers.Employees
 		#region Delete
 		
 		[HttpPost]
-		public IActionResult Delete(int id)
+        [ValidateAntiForgeryToken]
+        public IActionResult Delete(int id)
 		{
 			var message = string.Empty;
 			try

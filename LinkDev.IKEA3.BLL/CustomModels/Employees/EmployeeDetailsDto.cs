@@ -32,6 +32,10 @@ namespace LinkDev.IKEA3.BLL.CustomModels.Employees
         public DateTime CreatedOn { get; set; }//this is the date of create the record 
         public DateTime LastModifiedOn { get; set; }
 
+        public string? Department { get; set; }
+
+
+
         #endregion
 
 

@@ -1,6 +1,6 @@
 ﻿using LinkDev.IKEA3.BLL.CustomModels.Departments;
 using LinkDev.IKEA3.BLL.Services.Departments;
-using LinkDev.IKEA3.DAL.Models.Department;
+using LinkDev.IKEA3.DAL.Models.Departments;
 using LinkDev.IKEA3.PL.ViewModels.Departments;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
@@ -39,7 +39,7 @@ namespace LinkDev.IKEA3.PL.Controllers
 
         #region Create
        
-        [HttpGet] 
+        [HttpGet]
         public IActionResult Create()
         {
             return View();
@@ -47,24 +47,32 @@ namespace LinkDev.IKEA3.PL.Controllers
        
         
         [HttpPost]
-        public IActionResult Create(CreatedDepartmentDto department)
+        [ValidateAntiForgeryToken]
+        public IActionResult Create(DepartmentViewModel departmentVM)
         {
             if (!ModelState.IsValid)
-                return View(department);
+                return View(departmentVM);
 
             var message = string.Empty;
 
             try
             {
-                var result = _departmentService.CreatedDepartment(department);
-                if (result > 0)
-                    return RedirectToAction(nameof(Index));
-                else
+                var createdDepartment = new CreatedDepartmentDto()
                 {
-                    message = "Department isn't Created";
-                    ModelState.AddModelError(string.Empty, message);
-                    return View(department);
-                }
+                    Code = departmentVM.Code,
+                    Name = departmentVM.Name,
+                    Description = departmentVM.Description,
+                    CreationDate = departmentVM.CreationDate,
+                };
+                var result = _departmentService.CreatedDepartment(createdDepartment) > 0;
+
+                if (!result)
+                   message = "Department is Created";
+               
+                  
+            ModelState.AddModelError(string.Empty, message);
+            return View(departmentVM);
+              
             }
             catch (Exception ex)
             {
@@ -72,10 +80,10 @@ namespace LinkDev.IKEA3.PL.Controllers
 
                 message = _environment.IsDevelopment() ? ex.Message : "an error has occured during updating the department  :( ";
 
+                ViewData["message"]=message;
+                return RedirectToAction(nameof(Index));
             }
 
-            ModelState.AddModelError(string.Empty, message);
-            return View(department);
 
         }
         #endregion
@@ -97,7 +105,6 @@ namespace LinkDev.IKEA3.PL.Controllers
         #endregion
 
         #region Edit
-
         [HttpGet]
         public IActionResult Edit(int? id)
         {
@@ -109,7 +116,7 @@ namespace LinkDev.IKEA3.PL.Controllers
             if (department is null)
                 return NotFound();
 
-            return View(new DepartmentEditViewModel()
+            return View(new DepartmentViewModel()
             {
                 Code = department.Code,
                 Name = department.Name,
@@ -119,7 +126,8 @@ namespace LinkDev.IKEA3.PL.Controllers
         }
 
         [HttpPost]
-        public IActionResult Edit([FromRoute] int id, DepartmentEditViewModel departmentVM)
+        [ValidateAntiForgeryToken]
+        public IActionResult Edit([FromRoute] int id, DepartmentViewModel departmentVM)
         {
             if (!ModelState.IsValid)
                 return View(departmentVM);
@@ -155,19 +163,20 @@ namespace LinkDev.IKEA3.PL.Controllers
         #endregion
 
         #region Delete
-        [HttpGet]
-        public IActionResult Delete(int? id)
-        {
-            if (id is null)
-                return BadRequest();
-            var department = _departmentService.GetDepartmentById(id.Value);
+        //[HttpGet]
+        //public IActionResult Delete(int? id)
+        //{
+        //    if (id is null)
+        //        return BadRequest();
+        //    var department = _departmentService.GetDepartmentById(id.Value);
 
-            if (department is null)
-                return NotFound();
-            return View(department);
+        //    if (department is null)
+        //        return NotFound();
+        //    return View(department);
 
-        }
+        //}
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Delete(int id)
         {
             var message = string.Empty;

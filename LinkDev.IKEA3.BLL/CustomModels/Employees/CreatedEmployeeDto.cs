@@ -32,6 +32,8 @@ namespace LinkDev.IKEA3.BLL.CustomModels.Employees
 		public EmpType EmployeeType { get; set; }
 		public Gender Gender { get; set; }
 
+		[Display(Name ="Department")]
+		public int? DepartmentId { get; set; }
 
 	}
 }

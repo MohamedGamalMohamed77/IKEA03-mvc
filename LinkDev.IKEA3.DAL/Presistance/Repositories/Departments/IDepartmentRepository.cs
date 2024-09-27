@@ -1,4 +1,4 @@
-﻿using LinkDev.IKEA3.DAL.Models.Department;
+﻿using LinkDev.IKEA3.DAL.Models.Departments;
 using LinkDev.IKEA3.DAL.Presistance.Repositories._Generic;
 using System;
 using System.Collections.Generic;

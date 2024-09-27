@@ -19,7 +19,8 @@ namespace LinkDev.IKEA3.PL
 
             builder.Services.AddDbContext<ApplicationDbContext>((optionsBuilder) =>
             {
-                optionsBuilder.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+                optionsBuilder.UseLazyLoadingProxies()
+                .UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
             });
             builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
             builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();

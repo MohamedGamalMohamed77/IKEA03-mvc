@@ -1,5 +1,5 @@
-﻿using LinkDev.IKEA3.DAL.Models.Department;
-using LinkDev.IKEA3.DAL.Models.Employee;
+﻿using LinkDev.IKEA3.DAL.Models.Departments;
+using LinkDev.IKEA3.DAL.Models.Employees;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
