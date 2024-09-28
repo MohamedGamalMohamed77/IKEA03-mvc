@@ -20,4 +20,8 @@
     <ProjectReference Include="..\LinkDev.IKEA3.BLL\LinkDev.IKEA3.BLL.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\files\Images\" />
+  </ItemGroup>
+
 </Project>
