@@ -1,6 +1,7 @@
 ﻿using LinkDev.IKEA3.BLL.CustomModels.Departments;
 using LinkDev.IKEA3.DAL.Models.Departments;
 using LinkDev.IKEA3.DAL.Presistance.Repositories.Departments;
+using LinkDev.IKEA3.DAL.Presistance.UnitOfWork;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -12,14 +13,15 @@ namespace LinkDev.IKEA3.BLL.Services.Departments
 {
     public class DepartmentService : IDepartmentService
     {
-        private IDepartmentRepository _departmeentRepository;
-        public DepartmentService(IDepartmentRepository departmeentRepository)
+        private readonly IUnitOfWork _unitOfWork;
+
+        public DepartmentService(IUnitOfWork unitOfWork)
         {
-            _departmeentRepository = departmeentRepository;
+            _unitOfWork = unitOfWork;
         }
         public IEnumerable<DepartmentDto> GetAllDepartments()
         {
-            var departments = _departmeentRepository.GetAllAsIQueryable().Where(D=>!D.IsDeleted).Select(department => new DepartmentDto
+            var departments = _unitOfWork.departmentRepository.GetAllAsIQueryable().Where(D=>!D.IsDeleted).Select(department => new DepartmentDto
             {
                 Id = department.Id,
                 Code = department.Code,
@@ -31,7 +33,7 @@ namespace LinkDev.IKEA3.BLL.Services.Departments
         }
         public DepartmentDetailsDto? GetDepartmentById(int id)
         {
-            var department = _departmeentRepository.GetById(id);
+            var department = _unitOfWork.departmentRepository.GetById(id);
             if (department != null)
                 return new DepartmentDetailsDto()
                 {
@@ -59,7 +61,8 @@ namespace LinkDev.IKEA3.BLL.Services.Departments
                 LastModifiedBy = 1,
                 LastModifiedOn = DateTime.UtcNow
             };
-            return _departmeentRepository.Add(createdDepartment);
+           _unitOfWork.departmentRepository.Add(createdDepartment);
+            return _unitOfWork.Complete();
         }
         public int UpdatedDepartment(UpdatedDepartmentDto department)
         {
@@ -73,15 +76,16 @@ namespace LinkDev.IKEA3.BLL.Services.Departments
                 LastModifiedBy = 1,
                 LastModifiedOn = DateTime.UtcNow
             };
-            return _departmeentRepository.Update(createdDepartment);
+             _unitOfWork.departmentRepository.Update(createdDepartment);
+            return _unitOfWork.Complete();
         }
         public  bool DeleteDepartment(int departmentId)
         {
-
-            var department = _departmeentRepository.GetById(departmentId);
+            var departmentRepo = _unitOfWork.departmentRepository;
+            var department = departmentRepo.GetById(departmentId);
             if (department is { })
-                return _departmeentRepository.Delete(department);
-            return false;
+                departmentRepo.Delete(department);
+            return _unitOfWork.Complete()>0;
         }
 
     }

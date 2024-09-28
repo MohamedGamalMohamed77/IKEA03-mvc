@@ -1,6 +1,7 @@
 ﻿using LinkDev.IKEA3.BLL.CustomModels.Employees;
 using LinkDev.IKEA3.DAL.Models.Employees;
 using LinkDev.IKEA3.DAL.Presistance.Repositories.Employees;
+using LinkDev.IKEA3.DAL.Presistance.UnitOfWork;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -12,11 +13,12 @@ namespace LinkDev.IKEA3.BLL.Services.Employees
 {
 	public class EmployeeService : IEmployeeService
 	{
-		private readonly IEmployeeRepository _employeeRepository;
-		public EmployeeService(IEmployeeRepository employeeRepository)
+        private readonly IUnitOfWork _unitOfWork;
+
+        public EmployeeService(IUnitOfWork unitOfWork)
 		{
-			_employeeRepository = employeeRepository;
-		}
+            _unitOfWork = unitOfWork;
+        }
 
 		public int CreatedEmployee(CreatedEmployeeDto createdEmployee)
 		{
@@ -37,7 +39,8 @@ namespace LinkDev.IKEA3.BLL.Services.Employees
 				LastModifiedOn = DateTime.UtcNow,
 				DepartmentId=createdEmployee.DepartmentId,
 			};
-			return _employeeRepository.Add(employee);
+			 _unitOfWork.employeeRepository.Add(employee);
+			return _unitOfWork.Complete();
 		}
 		public int UpdatedEmployee(UpdatedEmployeeDto updatedEmployee)
 		{
@@ -59,20 +62,25 @@ namespace LinkDev.IKEA3.BLL.Services.Employees
 				DepartmentId=updatedEmployee.DepartmentId,
 				
 			};
-			return _employeeRepository.Update(employee);
+			 _unitOfWork.employeeRepository.Update(employee);
+			return _unitOfWork.Complete();
 		}
 		public bool DeleteEmployee(int EmployeeId)
 		{
-			var employee = _employeeRepository.GetById(EmployeeId);
+			var employeeRepo =_unitOfWork.employeeRepository ;
+
+			var employee = employeeRepo.GetById(EmployeeId);
 			if (employee is { })
-				return _employeeRepository.Delete(employee);
-			return false;
+
+                employeeRepo.Delete(employee);
+			return _unitOfWork.Complete()>0;
 		}
 
-		public IEnumerable<EmployeeDto> GetAllEmployees()
+		public IEnumerable<EmployeeDto> GetEmployees(string search)
 		{
-		 var employees= _employeeRepository.GetAllAsIQueryable()
-				.Where(E=>!E.IsDeleted)
+		 var employees= _unitOfWork.employeeRepository
+				.GetAllAsIQueryable()
+				.Where(E=>!E.IsDeleted && (string.IsNullOrEmpty(search)||E.Name.ToLower().Contains(search.ToLower())))
 				.Include(E=>E.Department)
 				.Select(employee=> new EmployeeDto() 
 		 {
@@ -91,7 +99,7 @@ namespace LinkDev.IKEA3.BLL.Services.Employees
 
 		public EmployeeDetailsDto? GetEmployeeById(int id)
 		{
-			var employee = _employeeRepository.GetById(id);
+			var employee = _unitOfWork.employeeRepository.GetById(id);
 			if (employee is { })
 				return new EmployeeDetailsDto()
 				{

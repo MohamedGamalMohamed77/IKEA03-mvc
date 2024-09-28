@@ -26,15 +26,14 @@ namespace LinkDev.IKEA3.PL.Controllers.Employees
 			_logger = logger;
 			_environment = environment;
 			_employeeService = employeeService;
-		
 		}
 		#endregion
 
 		#region Index
 		[HttpGet]
-		public IActionResult Index()
+		public IActionResult Index(string search)
 		{
-			var employee = _employeeService.GetAllEmployees();
+			var employee = _employeeService.GetEmployees(search);
 			return View(employee);
 		}
 
@@ -74,14 +73,12 @@ namespace LinkDev.IKEA3.PL.Controllers.Employees
                     IsActive = employee.IsActive,
                 };
 
-                var result = _employeeService.CreatedEmployee(createdEmployee);
-				if (result > 0)
-					return RedirectToAction(nameof(Index));
-				else
+                var result = _employeeService.CreatedEmployee(createdEmployee) > 0;
+				if (!result)
 				{
-					message = "employee isn't Created";
+					message = "Employee is Created";
 					ModelState.AddModelError(string.Empty, message);
-					return View(employee);
+					return View(employee); 
 				}
 			}
 			catch (Exception ex)
@@ -92,9 +89,8 @@ namespace LinkDev.IKEA3.PL.Controllers.Employees
 
 			}
 
-			ModelState.AddModelError(string.Empty, message);
-			return View(employee);
-		}
+            return Redirect(nameof(Index));
+        }
 
 		#endregion
 

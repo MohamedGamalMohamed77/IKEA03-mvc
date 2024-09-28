@@ -38,24 +38,21 @@ namespace LinkDev.IKEA3.DAL.Presistance.Repositories._Generic
 
         }
 
-        public int Add(T T)
+        public void Add(T T)
         {
             _dbContext.Set<T>().Add(T);
-            return _dbContext.SaveChanges();
         }
 
-        public bool Delete(T T)
+        public void Delete(T T)
         {
             T.IsDeleted = true;
             _dbContext.Set<T>().Update(T);
-            return _dbContext.SaveChanges() > 0;
         }
 
 
-        public int Update(T T)
+        public void Update(T T)
         {
             _dbContext.Set<T>().Update(T);
-            return _dbContext.SaveChanges();
         }
 
     }

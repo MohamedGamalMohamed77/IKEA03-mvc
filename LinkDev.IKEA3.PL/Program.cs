@@ -3,6 +3,8 @@ using LinkDev.IKEA3.BLL.Services.Employees;
 using LinkDev.IKEA3.DAL.Presistance.Data;
 using LinkDev.IKEA3.DAL.Presistance.Repositories.Departments;
 using LinkDev.IKEA3.DAL.Presistance.Repositories.Employees;
+using LinkDev.IKEA3.DAL.Presistance.UnitOfWork;
+using LinkDev.IKEA3.PL.Mapping;
 using Microsoft.EntityFrameworkCore;
 
 namespace LinkDev.IKEA3.PL
@@ -22,13 +24,13 @@ namespace LinkDev.IKEA3.PL
                 optionsBuilder.UseLazyLoadingProxies()
                 .UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
             });
-            builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
-            builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
-
+            //builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
+            //builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+            builder.Services.AddScoped<IUnitOfWork,UnitOfWork>();
 
             builder.Services.AddScoped<IDepartmentService, DepartmentService>();
             builder.Services.AddScoped<IEmployeeService, EmployeeService>();
-
+            builder.Services.AddAutoMapper(M=>M.AddProfile(new MappingProfile()));
             builder.Services.AddControllers();
 
 
