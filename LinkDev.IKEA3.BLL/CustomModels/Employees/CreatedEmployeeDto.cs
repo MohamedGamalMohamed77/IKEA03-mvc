@@ -1,4 +1,5 @@
 ﻿using LinkDev.IKEA3.DAL.Common;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -34,6 +35,7 @@ namespace LinkDev.IKEA3.BLL.CustomModels.Employees
 
 		[Display(Name ="Department")]
 		public int? DepartmentId { get; set; }
+        public IFormFile? Image { get; set; }
 
-	}
+    }
 }

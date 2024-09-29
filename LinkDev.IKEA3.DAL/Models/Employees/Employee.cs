@@ -1,5 +1,6 @@
 ﻿using LinkDev.IKEA3.DAL.Common;
 using LinkDev.IKEA3.DAL.Models.Departments;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -45,6 +46,6 @@ namespace LinkDev.IKEA3.DAL.Models.Employees
 
 		public virtual Department? Department { get; set; }
 
-
-	}
+        public string? Image { get; set; }
+    }
 }

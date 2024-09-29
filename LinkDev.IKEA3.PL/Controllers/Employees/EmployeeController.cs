@@ -52,13 +52,11 @@ namespace LinkDev.IKEA3.PL.Controllers.Employees
 		{
 			if (ModelState.IsValid)
 				return View(employee);
-           
 
             var message = string.Empty;
 
 			try
 			{
-
                 var createdEmployee = new CreatedEmployeeDto()
                 {
                     Name = employee.Name,
@@ -74,12 +72,14 @@ namespace LinkDev.IKEA3.PL.Controllers.Employees
                 };
 
                 var result = _employeeService.CreatedEmployee(createdEmployee) > 0;
+
 				if (!result)
 				{
 					message = "Employee is Created";
 					ModelState.AddModelError(string.Empty, message);
 					return View(employee); 
 				}
+
 			}
 			catch (Exception ex)
 			{

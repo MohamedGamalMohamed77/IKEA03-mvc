@@ -1,4 +1,5 @@
-﻿using LinkDev.IKEA3.BLL.CustomModels.Employees;
+﻿using LinkDev.IKEA3.BLL.Common.Services.Attachments;
+using LinkDev.IKEA3.BLL.CustomModels.Employees;
 using LinkDev.IKEA3.DAL.Models.Employees;
 using LinkDev.IKEA3.DAL.Presistance.Repositories.Employees;
 using LinkDev.IKEA3.DAL.Presistance.UnitOfWork;
@@ -13,11 +14,13 @@ namespace LinkDev.IKEA3.BLL.Services.Employees
 {
 	public class EmployeeService : IEmployeeService
 	{
+		private readonly IAttachmentService _attachmentService;
         private readonly IUnitOfWork _unitOfWork;
 
-        public EmployeeService(IUnitOfWork unitOfWork)
+        public EmployeeService(IUnitOfWork unitOfWork,IAttachmentService attachmentService)
 		{
             _unitOfWork = unitOfWork;
+			_attachmentService = attachmentService;
         }
 
 		public int CreatedEmployee(CreatedEmployeeDto createdEmployee)
@@ -39,7 +42,10 @@ namespace LinkDev.IKEA3.BLL.Services.Employees
 				LastModifiedOn = DateTime.UtcNow,
 				DepartmentId=createdEmployee.DepartmentId,
 			};
-			 _unitOfWork.employeeRepository.Add(employee);
+			if (createdEmployee.Image is not null)
+				employee.Image = _attachmentService.Upload(createdEmployee.Image, "Images");
+
+			_unitOfWork.employeeRepository.Add(employee);
 			return _unitOfWork.Complete();
 		}
 		public int UpdatedEmployee(UpdatedEmployeeDto updatedEmployee)
@@ -62,7 +68,10 @@ namespace LinkDev.IKEA3.BLL.Services.Employees
 				DepartmentId=updatedEmployee.DepartmentId,
 				
 			};
-			 _unitOfWork.employeeRepository.Update(employee);
+			if (updatedEmployee.Image is not null)
+				employee.Image = _attachmentService.Upload(updatedEmployee.Image, "Images");
+
+			_unitOfWork.employeeRepository.Update(employee);
 			return _unitOfWork.Complete();
 		}
 		public bool DeleteEmployee(int EmployeeId)
