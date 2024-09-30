@@ -32,9 +32,9 @@ namespace LinkDev.IKEA3.PL.Controllers
         #region Index
 
         [HttpGet]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var departments = _departmentService.GetAllDepartments();
+            var departments = await _departmentService.GetAllDepartmentsAsync();
             return View(departments);
         }
 
@@ -45,13 +45,13 @@ namespace LinkDev.IKEA3.PL.Controllers
         [HttpGet]
         public IActionResult Create()
         {
-            return View();
+            return  View();
         }
 
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(DepartmentViewModel departmentVM)
+        public async Task<IActionResult> Create(DepartmentViewModel departmentVM)
         {
             if (!ModelState.IsValid)
                 return View(departmentVM);
@@ -60,17 +60,17 @@ namespace LinkDev.IKEA3.PL.Controllers
 
             try
             {
-                //var createdDepartment = new CreatedDepartmentDto()
-                //{
-                //    Code = departmentVM.Code,
-                //    Name = departmentVM.Name,
-                //    Description = departmentVM.Description,
-                //    CreationDate = departmentVM.CreationDate,
-                //};
+                var createdDepartment = new CreatedDepartmentDto()
+                {
+                    Code = departmentVM.Code,
+                    Name = departmentVM.Name,
+                    Description = departmentVM.Description,
+                    CreationDate = departmentVM.CreationDate,
+                };
 
-                var createdDepartment = _mapper.Map<CreatedDepartmentDto>(departmentVM);
+                //   var createdDepartment = _mapper.Map<CreatedDepartmentDto>(departmentVM);
 
-                var result = _departmentService.CreatedDepartment(createdDepartment) > 0;
+                var result = await _departmentService.CreatedDepartmentAsync(createdDepartment) > 0;
 
                 if (!result)
                 {
@@ -97,12 +97,12 @@ namespace LinkDev.IKEA3.PL.Controllers
 
         #region Details
         [HttpGet]
-        public IActionResult Details(int? id)
+        public async Task<IActionResult> Details(int? id)
         {
             if (id is null)
                 return BadRequest();
 
-            var department = _departmentService.GetDepartmentById(id.Value);
+            var department = await _departmentService.GetDepartmentByIdAsync(id.Value);
 
             if (department is null)
                 return NotFound();
@@ -113,12 +113,12 @@ namespace LinkDev.IKEA3.PL.Controllers
 
         #region Edit
         [HttpGet]
-        public IActionResult Edit(int? id)
+        public async Task<IActionResult> Edit(int? id)
         {
             if (id is null)
                 return BadRequest();
 
-            var department = _departmentService.GetDepartmentById(id.Value);
+            var department = await _departmentService.GetDepartmentByIdAsync(id.Value);
 
             if (department is null)
                 return NotFound();
@@ -129,7 +129,7 @@ namespace LinkDev.IKEA3.PL.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit([FromRoute] int id, DepartmentViewModel departmentVM)
+        public async Task<IActionResult> Edit([FromRoute] int id, DepartmentViewModel departmentVM)
         {
             if (!ModelState.IsValid)
                 return View(departmentVM);
@@ -147,7 +147,7 @@ namespace LinkDev.IKEA3.PL.Controllers
 
                 var departmentToUpdate = _mapper.Map<UpdatedDepartmentDto>(departmentVM);
 
-               var result = _departmentService.UpdatedDepartment(departmentToUpdate);
+               var result = await _departmentService.UpdatedDepartmentAsync(departmentToUpdate);
 
                 if (result > 0)
                     return RedirectToAction("Index");
@@ -182,12 +182,12 @@ namespace LinkDev.IKEA3.PL.Controllers
         //}
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
             var message = string.Empty;
             try
             {
-                var deleted = _departmentService.DeleteDepartment(id);
+                var deleted = await _departmentService.DeleteDepartmentAsync(id);
 
                 if (deleted)
                     return RedirectToAction(nameof(Index));

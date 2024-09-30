@@ -31,15 +31,16 @@ namespace LinkDev.IKEA3.PL.Controllers.Employees
 
 		#region Index
 		[HttpGet]
-		public IActionResult Index(string search)
+		public async Task<IActionResult> Index(string search)
 		{
-			var employee = _employeeService.GetEmployees(search);
+			var employee = await _employeeService.GetEmployeesAsync(search);
 			return View(employee);
 		}
 
 		#endregion
 
 		#region Create
+
 		[HttpGet]
         public IActionResult Create()
 		{
@@ -48,33 +49,36 @@ namespace LinkDev.IKEA3.PL.Controllers.Employees
 
 		[HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(EmployeeViewModel employee)
+        public async Task<IActionResult> Create(EmployeeViewModel employee)
 		{
-			if (ModelState.IsValid)
+			if (!ModelState.IsValid)
 				return View(employee);
 
             var message = string.Empty;
 
 			try
 			{
-                var createdEmployee = new CreatedEmployeeDto()
-                {
-                    Name = employee.Name,
-                    Age = employee.Age,
-                    Address = employee.Address,
-                    HiringDate = employee.HiringDate,
-                    Salary = employee.Salary,
-                    Email = employee.Email,
-                    Gender = employee.Gender,
-                    EmployeeType = employee.EmployeeType,
-                    PhoneNumber = employee.PhoneNumber,
-                    IsActive = employee.IsActive,
-                };
+				var createdEmployee = new CreatedEmployeeDto()
+				{
+					Name = employee.Name,
+					Age = employee.Age,
+					Address = employee.Address,
+					HiringDate = employee.HiringDate,
+					Salary = employee.Salary,
+					Email = employee.Email,
+					Gender = employee.Gender,
+					EmployeeType = employee.EmployeeType,
+					PhoneNumber = employee.PhoneNumber,
+					IsActive = employee.IsActive,
+					DepartmentId = employee.DepartmentId,
+					Image=employee.Image
+				};
 
-                var result = _employeeService.CreatedEmployee(createdEmployee) > 0;
+				var result =await _employeeService.CreatedEmployeeAsync(createdEmployee) > 0;
 
 				if (!result)
 				{
+
 					message = "Employee is Created";
 					ModelState.AddModelError(string.Empty, message);
 					return View(employee); 
@@ -85,8 +89,11 @@ namespace LinkDev.IKEA3.PL.Controllers.Employees
 			{
 				_logger.LogError(ex, ex.Message);
 
-				message = _environment.IsDevelopment() ? ex.Message : "an error has occured during updating the employee  :( ";
+				message = _environment.IsDevelopment() ? ex.Message : "an error has occured during creating the employee  :( ";
 
+                ViewData["message"] = message;
+                return RedirectToAction(nameof(Index));
+            
 			}
 
             return Redirect(nameof(Index));
@@ -97,12 +104,12 @@ namespace LinkDev.IKEA3.PL.Controllers.Employees
 
 		#region Details
 		[HttpGet]
-		public IActionResult Details(int? id)
+		public async Task<IActionResult> Details(int? id)
 		{
 			if (id is null)
 				return BadRequest();
 
-			var employee = _employeeService.GetEmployeeById(id.Value);
+			var employee = await _employeeService.GetEmployeeByIdAsync(id.Value);
 
 			if (employee is null)
 				return NotFound();
@@ -114,17 +121,17 @@ namespace LinkDev.IKEA3.PL.Controllers.Employees
 		#region Edit
 
 		[HttpGet]
-		public IActionResult Edit(int? id)
+		public async Task<IActionResult> Edit(int? id)
 		{
 			if (id is null)
 				return BadRequest();
 
-			var employee = _employeeService.GetEmployeeById(id.Value);
+			var employee = await _employeeService.GetEmployeeByIdAsync(id.Value);
 
 			if (employee is null)
 				return NotFound();
 
-			return View(new UpdatedEmployeeDto()
+			return View(new EmployeeViewModel()
 			{
                 Name = employee.Name,
                 Age = employee.Age,
@@ -141,7 +148,7 @@ namespace LinkDev.IKEA3.PL.Controllers.Employees
 
 		[HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit([FromRoute] int id, EmployeeViewModel employee)
+        public async Task<IActionResult> Edit([FromRoute] int id, EmployeeViewModel employee)
 		{
 			if (!ModelState.IsValid)
 				return View(employee);
@@ -162,9 +169,9 @@ namespace LinkDev.IKEA3.PL.Controllers.Employees
                     IsActive = employee.IsActive,
                 };
 				
-				var result = _employeeService.UpdatedEmployee(updatedEmployee) > 0;
+				var result = await _employeeService.UpdatedEmployeeAsync(updatedEmployee);
 
-				if (result)
+				if (result >0)
 					return RedirectToAction("Index");
 				message = "an error has occured during updating the employee  :( ";
 
@@ -186,12 +193,12 @@ namespace LinkDev.IKEA3.PL.Controllers.Employees
 		
 		[HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
 		{
 			var message = string.Empty;
 			try
 			{
-				var deleted = _employeeService.DeleteEmployee(id);
+				var deleted = await _employeeService.DeleteEmployeeAsync(id);
 
 				if (deleted)
 					return RedirectToAction(nameof(Index));

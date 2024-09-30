@@ -9,7 +9,7 @@ namespace LinkDev.IKEA3.DAL.Models
     public class ModelBase
     {
         public int Id { get; set; }
-        public bool IsDeleted { get; set; }
+        public bool IsDeleted { get; set; }=false;
         public int CreatedBy { get; set; }
         public int LastModifiedBy { get; set; }
         public DateTime CreatedOn { get; set; }
