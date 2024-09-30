@@ -18,6 +18,7 @@ namespace LinkDev.IKEA3.DAL.Presistance.Data.Configurations.Departments
             builder.Property(d => d.Name).HasColumnType("varchar").HasMaxLength(50).IsRequired();
             builder.Property(d => d.CreatedOn).HasDefaultValueSql("GETUTCDATE()");
             builder.Property(d => d.LastModifiedOn).HasComputedColumnSql("GETDATE()");
+            
 
             builder.HasMany(D => D.employees)
                     .WithOne(E => E.Department)

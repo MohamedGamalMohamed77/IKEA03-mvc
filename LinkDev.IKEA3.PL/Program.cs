@@ -1,3 +1,4 @@
+using LinkDev.IKEA3.BLL.Common.Services.Attachments;
 using LinkDev.IKEA3.BLL.Services.Departments;
 using LinkDev.IKEA3.BLL.Services.Employees;
 using LinkDev.IKEA3.DAL.Presistance.Data;
@@ -32,7 +33,7 @@ namespace LinkDev.IKEA3.PL
             builder.Services.AddScoped<IEmployeeService, EmployeeService>();
             builder.Services.AddAutoMapper(M=>M.AddProfile(new MappingProfile()));
             builder.Services.AddControllers();
-
+            builder.Services.AddTransient<IAttachmentService, AttachmentService>();
 
             #endregion
             builder.Logging.AddConsole();

@@ -13,9 +13,9 @@ namespace LinkDev.IKEA3.BLL.Common.Services.Attachments
         private readonly List<string> _allowedExtensions = new() { ".png", ".jpg", ".jpeg" };
         private const int _allowedSize = 2_097_152;
 
-        public string? Upload(IFormFile file, string folderName)
+        public async Task<string?> UploadAsync(IFormFile file, string folderName)
         {
-            var extension = Path.GetExtension(file.FileName);
+            var extension =  Path.GetExtension(file.FileName);
 
             if (!_allowedExtensions.Contains(extension))
                 return null;
@@ -30,7 +30,8 @@ namespace LinkDev.IKEA3.BLL.Common.Services.Attachments
             var fileName = $"{Guid.NewGuid()}{extension}";
             var filePath = Path.Combine(folderPath, fileName);
             using var fileStream = new FileStream(filePath, FileMode.Create);
-            file.CopyTo(fileStream);
+
+           await file.CopyToAsync(fileStream);
 
             return fileName;
         }
