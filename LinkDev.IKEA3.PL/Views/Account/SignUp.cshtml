@@ -11,6 +11,7 @@
 		<div class="main-agileinfo">
 			<div class="agileits-top">
 				<form asp-action="SignUp">
+					<div asp-validation-summary="ModelOnly"></div>
 					<input class="text mb-2" asp-for="FirstName" placeholder="First Name" required="">
 					<input class="text mb-2" asp-for="LastName" placeholder="Last name" required="">
 					<input class="text mb-2" asp-for="UserName" placeholder="Username" required="">
@@ -26,6 +27,14 @@
 					</div>
 					<input type="submit" value="SIGNUP">
 				</form>
-				<p>Don't have an Account? <a asp-action="SignIn"> Login Now!</a></p>
+				<p>Don't have an Account? <a asp-action="SignUp"> Login Now!</a></p>
 			</div>
 		</div> 
+
+
+
+@section ValidationScripts
+  {
+	  <partial name="_ValidationScriptsPartial"/>
+  }
+
