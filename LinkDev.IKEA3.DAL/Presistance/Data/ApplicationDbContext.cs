@@ -1,5 +1,6 @@
 ﻿using LinkDev.IKEA3.DAL.Models.Departments;
 using LinkDev.IKEA3.DAL.Models.Employees;
+using LinkDev.IKEA3.DAL.Models.Identities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -11,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace LinkDev.IKEA3.DAL.Presistance.Data
 {
-	public class ApplicationDbContext : IdentityDbContext
+	public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
 	{
 		public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
 		//protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
