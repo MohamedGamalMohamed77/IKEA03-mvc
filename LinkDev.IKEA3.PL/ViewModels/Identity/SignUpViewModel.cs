@@ -5,8 +5,10 @@ namespace LinkDev.IKEA3.PL.ViewModels.Identity
 	public class SignUpViewModel
 	{
 		[Display(Name = "First Name")]
+		[MinLength(3)]
 		public string FirstName { get; set; } = null!;
 		[Display(Name = "Last Name")]
+		[MinLength(3)]
 		public string LastName { get; set; } = null!;
 		public string UserName { get; set; } = null!;
 		[EmailAddress]

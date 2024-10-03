@@ -3,8 +3,10 @@ using System.ComponentModel.DataAnnotations;
 
 namespace LinkDev.IKEA3.PL.ViewModels.Employees
 {
-	public class EmployeeViewModel
-	{
+    public class EmployeeViewModel
+    {
+        public int Id { get; set; }
+
         [MaxLength(50, ErrorMessage = "MaxLength of Name is 50 Chars")]
         [MinLength(5, ErrorMessage = "MinLength of Name is 5 Chars")]
         public string Name { get; set; } = null!;

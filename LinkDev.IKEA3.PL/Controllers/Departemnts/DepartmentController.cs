@@ -3,11 +3,13 @@ using LinkDev.IKEA3.BLL.CustomModels.Departments;
 using LinkDev.IKEA3.BLL.Services.Departments;
 using LinkDev.IKEA3.DAL.Models.Departments;
 using LinkDev.IKEA3.PL.ViewModels.Departments;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LinkDev.IKEA3.PL.Controllers
 {
+    [Authorize]
     public class DepartmentController : Controller
     {
         #region Services

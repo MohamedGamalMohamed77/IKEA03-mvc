@@ -6,10 +6,12 @@ using LinkDev.IKEA3.DAL.Models.Departments;
 using LinkDev.IKEA3.DAL.Models.Employees;
 using LinkDev.IKEA3.PL.ViewModels.Departments;
 using LinkDev.IKEA3.PL.ViewModels.Employees;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LinkDev.IKEA3.PL.Controllers.Employees
 {
+	[Authorize]
 	public class EmployeeController : Controller
 	{
 		#region Services
@@ -157,6 +159,7 @@ namespace LinkDev.IKEA3.PL.Controllers.Employees
 			{
 				var updatedEmployee=new UpdatedEmployeeDto() 
 				{
+					Id=id,
                     Name = employee.Name,
                     Age = employee.Age,
                     Address = employee.Address,
@@ -181,11 +184,12 @@ namespace LinkDev.IKEA3.PL.Controllers.Employees
 				_logger.LogError(ex, ex.Message);
 
 				message = _environment.IsDevelopment() ? ex.Message : "an error has occured during updating the employee  :( ";
+				ViewData["message"] = message;
+				return RedirectToAction(nameof(Index));
 
 			}
 
-			ModelState.AddModelError(string.Empty, message);
-			return View(employee);
+			return Redirect(nameof(Index));
 		}
 		#endregion
 

@@ -72,6 +72,7 @@ namespace LinkDev.IKEA3.BLL.Services.Employees
             if (updatedEmployee.Image is not null)
                 employee.Image = await _attachmentService.UploadAsync(updatedEmployee.Image, "Images");
 
+
             _unitOfWork.employeeRepository.Update(employee);
             return await _unitOfWork.CompleteAsync();
         }

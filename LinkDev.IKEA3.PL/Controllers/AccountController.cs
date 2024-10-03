@@ -30,9 +30,10 @@ namespace LinkDev.IKEA3.PL.Controllers
 
 			if (!ModelState.IsValid)
 				return BadRequest();
+
 			var user = await _userManager.FindByNameAsync(model.UserName);
 
-			if (user is null)
+			if (user is { })
 			{
 				ModelState.AddModelError(nameof(SignUpViewModel.UserName), "the UserName is already present");
 				return View(model);
@@ -40,8 +41,8 @@ namespace LinkDev.IKEA3.PL.Controllers
 
 			user = new ApplicationUser
 			{
-				FirstName = model.FirstName,
-				LastName = model.LastName,
+				FName = model.FirstName,
+				LName = model.LastName,
 				UserName = model.UserName,
 				Email = model.Email,
 				IsAgree = model.IsAgree,
@@ -86,15 +87,13 @@ namespace LinkDev.IKEA3.PL.Controllers
 					if (result.IsLockedOut)
 						ModelState.AddModelError(string.Empty, "Your account is Locked");
 					if (result.Succeeded)
-						return RedirectToAction(nameof(HomeController),"Home");
+						return RedirectToAction(nameof(HomeController.Index), "Home"); //here problem return me to SignIn not Index 
 				}
 			}
 			
 			else
-				ModelState.AddModelError(string.Empty, "Invalid Login attempt");
-				
-			
 
+				ModelState.AddModelError(string.Empty, "Invalid Login attempt");
 			return View(model);
 		}
 

@@ -55,9 +55,27 @@ namespace LinkDev.IKEA3.PL
 				options.Lockout.MaxFailedAccessAttempts = 5;
 				options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromDays(5);
 
+
+
+
 			})
 				.AddEntityFrameworkStores < ApplicationDbContext>();
 
+			builder.Services.ConfigureApplicationCookie((options)=>
+			{ 
+				options.LoginPath="/Account/SignIn";
+				options.AccessDeniedPath = "/Home/Error";
+				options.ExpireTimeSpan = TimeSpan.FromDays(1);
+				options.LogoutPath = "/Account/SignIn";
+
+			});
+			builder.Services.AddAuthentication((options)=>
+			{
+				options.DefaultAuthenticateScheme = "Identity.Application";
+				options.DefaultChallengeScheme = "Identity.Application";
+
+			}
+			);
 
 			#endregion
 
@@ -81,12 +99,14 @@ namespace LinkDev.IKEA3.PL
 			app.UseRouting();
 
 			app.UseAuthorization();
+			app.UseAuthentication();
 
 			app.MapControllerRoute(
 				name: "default",
 				pattern: "{controller=Home}/{action=Index}/{id?}");
 
 			#endregion
+
 			app.Run();
 		}
 	}
